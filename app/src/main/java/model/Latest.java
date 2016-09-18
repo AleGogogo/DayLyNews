@@ -11,7 +11,7 @@ public class Latest {
     private List<StroiesEntity> stroies;
     private List<Top_stroies> top_stroies;
     private String date;
-    static class Top_stroies{
+    public static class Top_stroies{
         /**
          * top_stories: [
          {
@@ -25,7 +25,7 @@ public class Latest {
             int id;
             int type;
             String title;
-            Image image;
+            String image;
             String ga_prefix;
 
         public int getId() {
@@ -52,11 +52,11 @@ public class Latest {
             this.title = title;
         }
 
-        public Image getImage() {
+        public String getImage() {
             return image;
         }
 
-        public void setImage(Image image) {
+        public void setImage(String image) {
             this.image = image;
         }
 
