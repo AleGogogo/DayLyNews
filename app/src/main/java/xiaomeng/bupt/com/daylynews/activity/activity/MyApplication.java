@@ -1,3 +1,5 @@
+package xiaomeng.bupt.com.daylynews.activity.activity;
+
 import android.app.Application;
 import android.content.Context;
 

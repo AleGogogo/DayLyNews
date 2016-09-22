@@ -1,32 +1,31 @@
 package model;
 
-import android.media.Image;
 
 import java.util.List;
 
-/**
- * Created by LYW on 2016/9/17.
- */
+
 public class Latest {
-    private List<StroiesEntity> stroies;
-    private List<Top_stroies> top_stroies;
+    private List<StoriesEntity> stories;
+    private List<Top_stroies> top_stories;
     private String date;
-    public static class Top_stroies{
+
+    public static class Top_stroies {
         /**
          * top_stories: [
-         {
-         title: "商场和很多人家里，竹制家具越来越多（多图）",
-         image: "http://p2.zhimg.com/9a/15/9a1570bb9e5fa53ae9fb9269a56ee019.jpg",
-         ga_prefix: "052315",
-         type: 0,
-         id: 3930883
-         },
+         * {
+         * title: "商场和很多人家里，竹制家具越来越多（多图）",
+         * image: "http://p2.zhimg.com/9a/15/9a1570bb9e5fa53ae9fb9269a56ee019
+         * .jpg",
+         * ga_prefix: "052315",
+         * type: 0,
+         * id: 3930883
+         * },
          */
-            int id;
-            int type;
-            String title;
-            String image;
-            String ga_prefix;
+        int id;
+        int type;
+        String title;
+        String image;
+        String ga_prefix;
 
         public int getId() {
             return id;
@@ -80,20 +79,20 @@ public class Latest {
         }
     }
 
-    public List<StroiesEntity> getStroies() {
-        return stroies;
+    public List<StoriesEntity> getStories() {
+        return stories;
     }
 
-    public void setStroies(List<StroiesEntity> stroies) {
-        this.stroies = stroies;
+    public void setStroies(List<StoriesEntity> stroies) {
+        this.stories = stroies;
     }
 
     public List<Top_stroies> getTop_stroies() {
-        return top_stroies;
+        return top_stories;
     }
 
     public void setTop_stroies(List<Top_stroies> top_stroies) {
-        this.top_stroies = top_stroies;
+        this.top_stories = top_stroies;
     }
 
     public String getDate() {
@@ -107,8 +106,8 @@ public class Latest {
     @Override
     public String toString() {
         return "Latest{" +
-                "top_stories=" + top_stroies +
-                ", stories=" + stroies +
+                "top_stories=" + top_stories +
+                ", stories=" + stories +
                 ", date='" + date + '\'' +
                 '}';
     }

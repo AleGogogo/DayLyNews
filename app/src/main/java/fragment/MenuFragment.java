@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -72,6 +73,19 @@ public class MenuFragment extends BaseFragment {
             tv_download = (TextView)view.findViewById(R.id.id_menu_offlinedownload_tv);
             tv_main = (TextView)view.findViewById(R.id.id_menu_main_tv);
             mListView = (ListView)view.findViewById(R.id.id_menu_listview);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int
+                        position, long id) {
+                    //和mainFragment很相似
+                    getFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_from_right,R.anim.slide_out_to_left)
+                            .replace(R.id.id_fl,new NewsFragment(items.get(position).getId(),
+                                    items.get(position).getName()),"news")
+                            .commit();
+                }
+            });
         return view;
     }
 
@@ -137,7 +151,7 @@ public class MenuFragment extends BaseFragment {
                 NewsListItem item = new NewsListItem();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String name = jsonObject.getString("name");
-                int id = jsonObject.getInt("id");
+                String id = jsonObject.getString("id");
                 item.setName(name);
                 item.setId(id);
                 items.add(item);

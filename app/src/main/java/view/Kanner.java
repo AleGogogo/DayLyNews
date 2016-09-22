@@ -2,8 +2,10 @@ package view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ import xiaomeng.bupt.com.daylynews.R;
 /**
  * Created by LYW on 2016/9/17.
  */
-public class Kanner extends FrameLayout {
+public class Kanner extends FrameLayout implements View.OnClickListener{
     private List<View> views;
     private List<ImageView> iv_dots;
     private ViewPager vp;
@@ -35,6 +37,9 @@ public class Kanner extends FrameLayout {
     private DisplayImageOptions options;
     private boolean isAutoPaly;
     private int delayTime;
+    private int currentIntem;
+    private OnItemClickListener mItemClickListener;
+    private static final String TAG = "Kanner";
 
     public Kanner(Context context) {
         this(context, null);
@@ -59,11 +64,12 @@ public class Kanner extends FrameLayout {
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
-        //体会一下为什么在构造方法里new一个这个
+
         top_stroiesEntities = new ArrayList<>();
         iv_dots = new ArrayList<>();
         views = new ArrayList<>();
         delayTime = 2000;
+
     }
 
     //不知用意何在
@@ -82,22 +88,28 @@ public class Kanner extends FrameLayout {
     }
 
     private void initUI() {
+        //如果调用inflate方法，传入了ViewGroup root参数，则会从root中得到由layout_width和
+        // layout_height组成的LayoutParams，在attachToRoot设置为false的话，就会对我们加载的视图View
+        // 设置该LayoutParams。
         View view = LayoutInflater.from(mContext).inflate(R.layout
-                .kanner_layout, this, false);
+                .kanner_layout, this, true);
         vp = (ViewPager) view.findViewById(R.id.id_viewpager);
         LinearLayout ll_dot = (LinearLayout) view.findViewById(R.id.id_ll_dot);
+        ll_dot.removeAllViews();
 
         int len = top_stroiesEntities.size();
+        Log.d(TAG, "initUI: kanner's len is"+len);
         for (int i = 0; i < len; i++) {
             ImageView imageView = new ImageView(mContext);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
+
             ll_dot.addView(imageView, params);
-            ll_dot.addView(imageView);
+            iv_dots.add(imageView);
         }
 
-        for (int i = 0; i < len + 1; i++) {
+        for (int i = 0; i <= len + 1; i++) {
             View fm= LayoutInflater.from(mContext).inflate(R.layout
                     .kanner_content_layout
                     , null);
@@ -116,8 +128,128 @@ public class Kanner extends FrameLayout {
                         imageView,options
                 );
                 title.setText(top_stroiesEntities.get(0).getTitle());
+            }else {
+                mImageLoader.displayImage(top_stroiesEntities.get(i-1).getImage(),
+                        imageView,options);
+                title.setText(top_stroiesEntities.get(i-1).getTitle());
             }
+            fm.setOnClickListener(this);
+            views.add(fm);
+        }
+            vp.setAdapter(new MyPagerAdapter());
+        //Set whether this view can receive the focus.
+            vp.setFocusable(true);
+        //设置初始页面
+            vp.setCurrentItem(1);
+            currentIntem = 1;
+            vp.addOnPageChangeListener(new MyOnPagerListener());
+            startPlay();
+
+    }
+
+    private void startPlay(){
+       isAutoPaly = true;
+       mHandler.postDelayed(task,delayTime);
+    }
+    //为什么不把它定义在startplay的内部
+    private final Runnable task = new Runnable() {
+        @Override
+        public void run() {
+            if (isAutoPaly) {
+                currentIntem = (currentIntem % (top_stroiesEntities.size() + 1)) + 1;
+                //True to smoothly scroll to the new item, false to transition immediately
+                //false 代表立刻话过去
+                if (currentIntem == 1) {
+                    vp.setCurrentItem(currentIntem, false);
+                    mHandler.post(task);
+                }else {
+                    vp.setCurrentItem(currentIntem);
+                    mHandler.postDelayed(task,5000);
+                }
+            }else {
+                mHandler.postDelayed(task,5000);
+            }
+        }
+    };
+
+    @Override
+    public void onClick(View v) {
+        if (mItemClickListener !=null){
+            Latest.Top_stroies entity= top_stroiesEntities.get(
+                    vp.getCurrentItem()-1);
+            mItemClickListener.click(v,entity);
         }
     }
 
+    private class MyPagerAdapter extends PagerAdapter {
+        @Override
+        public int getCount() {
+            return views.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            container.addView(views.get(position));
+            return views.get(position);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object
+                object) {
+            container.removeView((View) object);
+        }
+    }
+
+    private class MyOnPagerListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int
+                positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+           for (int i =0;i<iv_dots.size();i++){
+               if (i == position-1){
+                   iv_dots.get(position).setImageResource(R.drawable.dot_focus);
+               }else {
+                   iv_dots.get(position).setImageResource(R.drawable.dot_blur);
+               }
+           }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+              switch (state){
+                  case 1:
+                      isAutoPaly = false;
+                      break;
+                  case 2:
+                      isAutoPaly = true;
+                      break;
+                  case 0:
+                      if (vp.getCurrentItem()== 0){
+                          vp.setCurrentItem(top_stroiesEntities.size(),false);
+                      }else if (vp.getCurrentItem()== top_stroiesEntities.size()+1){
+                          vp.setCurrentItem(1,false);
+                      }
+                      currentIntem = vp.getCurrentItem();
+                      isAutoPaly = true;
+                      break;
+              }
+        }
+
+    }
+
+    public interface OnItemClickListener{
+        void click(View v, Latest.Top_stroies top_stroies);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mItemClickListener = listener;
+    }
 }

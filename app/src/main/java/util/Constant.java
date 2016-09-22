@@ -9,5 +9,8 @@ public class Constant {
     //主题日报列表查看
     public static final String THEME_NEWSiTEMS = "themes";
     public static final String LATEST_NEWS = "news/latest";
+    public static final String BEFORE = "news/before/";
+    public static final int TOPIC = 131;
+    public static final String THEMENEWS = "theme/";
 
 }

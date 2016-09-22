@@ -20,7 +20,6 @@ import okhttp3.Request;
  * Created by rain on 2016/9/13.
  */
 public class HttpUtils {
-    private static AsyncHttpClient client = new AsyncHttpClient();
     private static OkHttpClient okHttpClient = new OkHttpClient();
 
     public static void get(String url, Callback responseCallback) {

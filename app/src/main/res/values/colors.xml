@@ -11,4 +11,6 @@
     <color name="colorMenuBlack">#000000</color>
     <color name="colorMenuBackGround">#EEE9E9</color>
     <color name="transparent">#00000000</color>
+    <color name="light_news_topic">#ff666666</color>
+    <color name="light_news_item">#FFF0F0F0</color>
 </resources>
