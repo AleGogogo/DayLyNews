@@ -12,5 +12,8 @@ public class Constant {
     public static final String BEFORE = "news/before/";
     public static final int TOPIC = 131;
     public static final String THEMENEWS = "theme/";
+    //使用在 最新消息 中获得的 id，拼接在 http://news-at.zhihu.com/api/4/news/ 后，得到对应消息 JSON 格式的内容
+
+    public static final String CONTENT = "news/";
 
 }

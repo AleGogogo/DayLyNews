@@ -1,6 +1,5 @@
 package xiaomeng.bupt.com.daylynews.activity.activity;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoadLatest() {
-        rePlce();
+        rePlace();
         curId = "latest";
     }
 
@@ -55,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void replaceFragment() {
         if (curId.equals("latest")){
-            rePlce();
+            rePlace();
 
         }else{
 
         }
     }
 
-    private void rePlce() {
+    private void rePlace() {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_from_right,R.anim.slide_out_to_left)
                 .replace(R.id.id_fl,new MainFragment(),"latest")
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public void setToolBarTitle(String text){
         mToolbar.setTitle(text);
     }
+    //这个有何用意
     public void setCurId(String id){
         curId = id;
     }

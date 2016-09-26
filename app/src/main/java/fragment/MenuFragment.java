@@ -32,6 +32,7 @@ import okhttp3.Response;
 import util.Constant;
 import util.HttpUtils;
 import xiaomeng.bupt.com.daylynews.R;
+import xiaomeng.bupt.com.daylynews.activity.activity.MainActivity;
 
 /**
  * Created by LYW on 2016/9/16.
@@ -84,6 +85,8 @@ public class MenuFragment extends BaseFragment {
                             .replace(R.id.id_fl,new NewsFragment(items.get(position).getId(),
                                     items.get(position).getName()),"news")
                             .commit();
+                    //点击完就会关闭侧滑菜单
+                    ((MainActivity)mActivity).coloseMenu();
                 }
             });
         return view;

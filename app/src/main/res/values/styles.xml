@@ -9,5 +9,7 @@
         <!--正常状态下字体颜色和icon颜色-->
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
-
+     <style name="MyToolbarTextStyle" parent="@android:style/TextAppearance.DeviceDefault">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>
