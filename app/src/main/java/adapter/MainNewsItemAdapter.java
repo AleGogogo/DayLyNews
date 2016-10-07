@@ -1,11 +1,14 @@
 package adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -80,8 +83,14 @@ public class MainNewsItemAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.tv_title.setTextColor(mContext.getResources().getColor(isLight ? android.R.color.black : android.R.color.white));
+        ((LinearLayout) holder.iv_title.getParent().getParent().getParent()).setBackgroundColor(mContext.getResources().
+                getColor(isLight ? R.color.light_news_item : R.color.dark_news_item));
+        holder.tv_topic.setTextColor(mContext.getResources().
+                getColor(isLight ? R.color.light_news_topic : R.color.dark_news_topic));
         if (story.getType() == Constant.TOPIC) {
             //View.GONE 不可见不占据布局
+            ((FrameLayout)holder.tv_topic.getParent()).setBackgroundColor(Color.TRANSPARENT);
             holder.tv_title.setVisibility(View.GONE);
             holder.iv_title.setVisibility(View.GONE);
             holder.tv_topic.setVisibility(View.VISIBLE);
@@ -90,6 +99,8 @@ public class MainNewsItemAdapter extends BaseAdapter {
             if (holder.tv_topic != null) {
                 holder.tv_topic.setVisibility(View.GONE);
             }
+            ((FrameLayout) holder.tv_topic.getParent()).setBackgroundResource(isLight ? R.drawable.item_seleor_background_light :
+                    R.drawable.item_background_selector_dark);
             holder.tv_title.setVisibility(View.VISIBLE);
             holder.iv_title.setVisibility(View.VISIBLE);
             holder.tv_title.setText(story.getTitle());

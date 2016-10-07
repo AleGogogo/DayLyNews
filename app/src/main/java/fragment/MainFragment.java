@@ -1,6 +1,7 @@
 package fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
-
 
 import com.google.gson.Gson;
 
@@ -21,7 +22,6 @@ import adapter.MainNewsItemAdapter;
 import model.Before;
 import model.Latest;
 import model.StoriesEntity;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -29,6 +29,7 @@ import util.Constant;
 import util.HttpUtils;
 import view.Kanner;
 import xiaomeng.bupt.com.daylynews.R;
+import xiaomeng.bupt.com.daylynews.activity.activity.LatestContentActivity;
 import xiaomeng.bupt.com.daylynews.activity.activity.MainActivity;
 
 /**
@@ -50,24 +51,36 @@ public class MainFragment extends BaseFragment {
     private MainNewsItemAdapter mAdapter;
 
     @Override
-    protected View initView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
+    protected View initView(final LayoutInflater inflater, ViewGroup container,
+                            final Bundle savedInstanceState) {
         ((MainActivity)mActivity).setToolBarTitle("今日热闻");
+        myHandler = new MyHandler();
         View view = inflater.inflate(R.layout.main_news_layout,container,false);
         mListView = (ListView) view.findViewById(R.id.id_main_news_listview);
         View header = LayoutInflater.from(mActivity).inflate(R.layout.kanner,null);
         kanner = (Kanner) header.findViewById(R.id.id_kanner);
-//        kanner.setOnItemClickListener(new Kanner.OnItemClickListener() {
-//            @Override
-//            public void click(View v, Latest.Top_stroies top_stroies) {
-//
-//            }
-//        });
+        kanner.setOnItemClickListener(new Kanner.OnItemClickListener() {
+            @Override
+            public void click(View v, Latest.Top_stories top_stories) {
+            //new 一个story 把top_stories 放进去，因为他们的数据格式差不多，并且story 继承了序列化
+                int[] startingLocation = new int[2];
+                v.getLocationOnScreen(startingLocation);
+                //为啥/2?
+                startingLocation[0] += v.getWidth()/2;
+                StoriesEntity storiesEntity = new StoriesEntity();
+                storiesEntity.setId(top_stories.getId());
+                storiesEntity.setTitle(top_stories.getTitle());
+                Intent intent = new Intent(mActivity, LatestContentActivity.class);
+                intent.putExtra("entity", storiesEntity);
+                intent.putExtra(Constant.START_LOCATION,startingLocation);
+                startActivity(intent);
+            }
+        });
         mListView.addHeaderView(header);
         mAdapter = new MainNewsItemAdapter(mActivity);
         mListView.setAdapter(mAdapter);
         initListener();
-        myHandler = new MyHandler();
+
         Log.d(TAG, "initView: 初始化已完成");
         return view;
     }
@@ -87,13 +100,31 @@ public class MainFragment extends BaseFragment {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int
                     visibleItemCount, int totalItemCount) {
-//                boolean enable = (firstVisibleItem == 0)&&(view.getChildAt(
-//                        firstVisibleItem).getTop() == 0);
-                // TODO: 2016/9/21 不知道这一部是干什么用的
+                //疑点1
+                if (mListView != null && mListView.getChildCount()>0) {
+                    boolean enable = (firstVisibleItem == 0) && (view.getChildAt(
+                            firstVisibleItem).getTop() == 0);
+                    ((MainActivity)mActivity).setSwipeRefreshEnable(enable);
+                }
                 if (firstVisibleItem +visibleItemCount == totalItemCount && !isLoading){
                     loaderMore(Constant.BEFORE+date);
                 }
 
+            }
+        });
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int[] startingLocation = new int[2];
+                //什么意思？
+                     startingLocation[0] += view.getWidth()/2;
+                Intent intent = new Intent(mActivity, LatestContentActivity.class);
+                StoriesEntity entity = (StoriesEntity) parent.getAdapter().getItem(position)    ;
+                intent.putExtra(Constant.START_LOCATION,startingLocation);
+                intent.putExtra("entity",entity);
+                startActivity(intent);
+                //感受一下这个是怎么回事？
+                mActivity.overridePendingTransition(0,0);
             }
         });
     }
@@ -175,7 +206,7 @@ public class MainFragment extends BaseFragment {
                 case LOADING_LATEST_NEWS:
                     latest = (Latest) msg.obj;
                     date = latest.getDate();
-                    kanner.setTop_stroiesEntities(latest.getTop_stroies());
+                    kanner.setTop_storiesEntities(latest.getTop_stroies());
                     List<StoriesEntity> stories = latest.getStories();
                     StoriesEntity storiesEntity = new StoriesEntity();
                     storiesEntity.setTitle("今日热闻");
@@ -214,5 +245,9 @@ public class MainFragment extends BaseFragment {
         result += date.substring(6,8);
         result += "日";
         return result;
+    }
+
+    public void updateTheme(){
+        mAdapter.notifyDataSetChanged();
     }
 }

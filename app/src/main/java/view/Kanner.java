@@ -31,7 +31,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
     private List<ImageView> iv_dots;
     private ViewPager vp;
     private Handler mHandler = new Handler();
-    private List<Latest.Top_stroies> top_stroiesEntities;
+    private List<Latest.Top_stories> top_storiesEntities;
     private Context mContext;
     private ImageLoader mImageLoader;
     private DisplayImageOptions options;
@@ -65,7 +65,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
                 .cacheOnDisk(true)
                 .build();
 
-        top_stroiesEntities = new ArrayList<>();
+        top_storiesEntities = new ArrayList<>();
         iv_dots = new ArrayList<>();
         views = new ArrayList<>();
         delayTime = 2000;
@@ -73,9 +73,9 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
     }
 
     //不知用意何在
-    public void setTop_stroiesEntities(List<Latest.Top_stroies>
-                                               top_stroiesEntities) {
-        this.top_stroiesEntities = top_stroiesEntities;
+    public void setTop_storiesEntities(List<Latest.Top_stories>
+                                               top_storiesEntities) {
+        this.top_storiesEntities = top_storiesEntities;
         reset();
     }
 
@@ -97,7 +97,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
         LinearLayout ll_dot = (LinearLayout) view.findViewById(R.id.id_ll_dot);
         ll_dot.removeAllViews();
 
-        int len = top_stroiesEntities.size();
+        int len = top_storiesEntities.size();
         Log.d(TAG, "initUI: kanner's len is"+len);
         for (int i = 0; i < len; i++) {
             ImageView imageView = new ImageView(mContext);
@@ -118,20 +118,20 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             if (i == 0){
                //显示图片，用imageloader
-                mImageLoader.displayImage(top_stroiesEntities.get(len-1).getImage(),
+                mImageLoader.displayImage(top_storiesEntities.get(len-1).getImage(),
                         imageView,options);
-                title.setText(top_stroiesEntities.get(len-1).getTitle());
+                title.setText(top_storiesEntities.get(len-1).getTitle());
             }
             //在本来的最后一张图片后面，再添加一张和第一张一样的图片来充当一个缓冲
             else if (i == len+1){
-                mImageLoader.displayImage(top_stroiesEntities.get(0).getImage(),
+                mImageLoader.displayImage(top_storiesEntities.get(0).getImage(),
                         imageView,options
                 );
-                title.setText(top_stroiesEntities.get(0).getTitle());
+                title.setText(top_storiesEntities.get(0).getTitle());
             }else {
-                mImageLoader.displayImage(top_stroiesEntities.get(i-1).getImage(),
+                mImageLoader.displayImage(top_storiesEntities.get(i-1).getImage(),
                         imageView,options);
-                title.setText(top_stroiesEntities.get(i-1).getTitle());
+                title.setText(top_storiesEntities.get(i-1).getTitle());
             }
             fm.setOnClickListener(this);
             views.add(fm);
@@ -156,7 +156,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
         @Override
         public void run() {
             if (isAutoPaly) {
-                currentIntem = (currentIntem % (top_stroiesEntities.size() + 1)) + 1;
+                currentIntem = (currentIntem % (top_storiesEntities.size() + 1)) + 1;
                 //True to smoothly scroll to the new item, false to transition immediately
                 //false 代表立刻话过去
                 if (currentIntem == 1) {
@@ -175,7 +175,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (mItemClickListener !=null){
-            Latest.Top_stroies entity= top_stroiesEntities.get(
+            Latest.Top_stories entity= top_storiesEntities.get(
                     vp.getCurrentItem()-1);
             mItemClickListener.click(v,entity);
         }
@@ -234,8 +234,8 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
                       break;
                   case 0:
                       if (vp.getCurrentItem()== 0){
-                          vp.setCurrentItem(top_stroiesEntities.size(),false);
-                      }else if (vp.getCurrentItem()== top_stroiesEntities.size()+1){
+                          vp.setCurrentItem(top_storiesEntities.size(),false);
+                      }else if (vp.getCurrentItem()== top_storiesEntities.size()+1){
                           vp.setCurrentItem(1,false);
                       }
                       currentIntem = vp.getCurrentItem();
@@ -247,7 +247,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
     }
 
     public interface OnItemClickListener{
-        void click(View v, Latest.Top_stroies top_stroies);
+        void click(View v, Latest.Top_stories top_stories);
     }
     public void setOnItemClickListener(OnItemClickListener listener){
         mItemClickListener = listener;

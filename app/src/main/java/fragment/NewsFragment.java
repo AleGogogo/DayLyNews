@@ -1,11 +1,13 @@
 package fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,13 +16,11 @@ import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-
 import java.io.IOException;
 import java.util.List;
 
 import adapter.NewsItemAdapter;
 import model.News;
-
 import model.StoriesEntity;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -28,6 +28,7 @@ import okhttp3.Response;
 import util.Constant;
 import util.HttpUtils;
 import xiaomeng.bupt.com.daylynews.R;
+import xiaomeng.bupt.com.daylynews.activity.activity.NewsContentActivity;
 
 /**
  * Created by LYW on 2016/9/21.
@@ -62,8 +63,23 @@ public class NewsFragment extends BaseFragment {
         title_tv = (TextView) header.findViewById(R.id.id_news_title_tv);
         title_img = (ImageView)header.findViewById(R.id.id_news_ivg);
         newsListView.addHeaderView(header);
-
+        initListener();
         return view;
+    }
+
+    private void initListener() {
+        newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int[] startingLocation = new int[2];
+                view.getLocationOnScreen(startingLocation);
+                startingLocation[0] += view.getWidth() / 2;
+                StoriesEntity entity = (StoriesEntity) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(mActivity, NewsContentActivity.class);
+                intent.putExtra(Constant.START_LOCATION, startingLocation);
+                intent.putExtra("entity", entity);
+            }
+        });
     }
 
     @Override
@@ -103,6 +119,9 @@ public class NewsFragment extends BaseFragment {
 
     }
 
+        public void updateTheme(){
+            mAdapter.notifyDataSetChanged();
+        }
     private class MyHandler extends Handler{
 
         @Override

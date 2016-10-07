@@ -15,5 +15,6 @@ public class Constant {
     //使用在 最新消息 中获得的 id，拼接在 http://news-at.zhihu.com/api/4/news/ 后，得到对应消息 JSON 格式的内容
 
     public static final String CONTENT = "news/";
+    public static final String START_LOCATION = "start_location";
 
 }

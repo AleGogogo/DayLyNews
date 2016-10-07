@@ -1,12 +1,13 @@
 package adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,6 +27,7 @@ public class NewsItemAdapter extends BaseAdapter{
     private List<StoriesEntity> entities;
     private ImageLoader mImageLoader;
     private DisplayImageOptions options;
+    private boolean isLight;
 
     public NewsItemAdapter(Context context, List<StoriesEntity> entities){
         mContext = context;
@@ -61,11 +63,24 @@ public class NewsItemAdapter extends BaseAdapter{
             convertView = LayoutInflater.from(mContext).inflate(R.layout.news_item,
                     parent,false);
             viewHolder.tv_title = (TextView) convertView.findViewById(R.id.id_newsitem_tv_title);
-            viewHolder.iv_image = (ImageView)convertView.findViewById(R.id.id_newsitem_iv_title);
+            viewHolder.iv_image = (ImageView)convertView.findViewById(R.id.id_news_item_iv_title);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        //设置夜间模式
+        viewHolder.tv_title.setTextColor(mContext.getResources().getColor(isLight ? android.R.color.black : android.R.color.white));
+
+        ((LinearLayout) viewHolder.iv_image.getParent().getParent().getParent()).setBackgroundColor(
+                       mContext.getResources().getColor(isLight ? R.color.light_news_item:
+                       R.color.dark_news_item)
+        );
+
+        ((FrameLayout) viewHolder.tv_title.getParent().getParent()).setBackgroundResource(
+                isLight ? R.drawable.item_seleor_background_light:
+                        R.drawable.item_seleor_background_light
+                 );
+
           StoriesEntity stroiesEntity = entities.get(position);
           if (stroiesEntity.getImages()!=null){
               viewHolder.iv_image.setVisibility(View.VISIBLE);

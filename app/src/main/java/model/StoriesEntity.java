@@ -1,11 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by LYW on 2016/9/21.
  */
-public class StoriesEntity {
+public class StoriesEntity implements Serializable{
     /**
      * title : 中国古代家具发展到今天有两个高峰，一个两宋一个明末（多图）
      * ga_prefix : 052321
@@ -22,7 +23,7 @@ public class StoriesEntity {
     private List<String> images;
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {

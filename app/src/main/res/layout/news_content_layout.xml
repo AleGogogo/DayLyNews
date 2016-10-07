@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <view.RevealBackGroundView
+    <view.RevealBackgroundView
         android:id="@+id/id_news_content_revealbackGroundView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

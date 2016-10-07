@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Latest {
     private List<StoriesEntity> stories;
-    private List<Top_stroies> top_stories;
+    private List<Top_stories> top_stories;
     private String date;
 
-    public static class Top_stroies {
+    public static class Top_stories {
         /**
          * top_stories: [
          * {
@@ -87,12 +87,12 @@ public class Latest {
         this.stories = stroies;
     }
 
-    public List<Top_stroies> getTop_stroies() {
+    public List<Top_stories> getTop_stroies() {
         return top_stories;
     }
 
-    public void setTop_stroies(List<Top_stroies> top_stroies) {
-        this.top_stories = top_stroies;
+    public void setTop_stroies(List<Top_stories> top_stroys) {
+        this.top_stories = top_stroys;
     }
 
     public String getDate() {

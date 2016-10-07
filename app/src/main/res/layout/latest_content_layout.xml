@@ -6,7 +6,7 @@
                                                  android:layout_height="match_parent"
                                                  android:orientation="vertical">
     <!--这个是实现页面扩散效果的-->
-    <view.RevealBackGroundView
+    <view.RevealBackgroundView
         android:id="@+id/id_revealbackgroundview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

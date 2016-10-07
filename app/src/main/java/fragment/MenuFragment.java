@@ -15,9 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +43,7 @@ public class MenuFragment extends BaseFragment {
     private ArrayList<NewsListItem> items;
     private NewsTypeAdapter mAdapter;
     private static final String TAG = "MenuFragment";
+    private boolean isLight;
 
     class responseHandler extends Handler{
         @Override
@@ -68,7 +66,7 @@ public class MenuFragment extends BaseFragment {
     protected View initView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.menu_layout,container,false);
-            li_menu = (LinearLayout)view.findViewById(R.id.id_menu_layout);
+            li_menu = (LinearLayout)view.findViewById(R.id.id_menu);
             tv_login = (TextView)view.findViewById(R.id.id_menu_login);
             tv_backup = (TextView)view.findViewById(R.id.id_menu_myCollection_tv);
             tv_download = (TextView)view.findViewById(R.id.id_menu_offlinedownload_tv);
@@ -198,8 +196,18 @@ public class MenuFragment extends BaseFragment {
                         parent,false);
             }
             TextView textView = (TextView) convertView.findViewById(R.id.id_menu_newsitem);
+            textView.setTextColor(getResources().getColor(isLight ? R.color.light_menu_listview_textcolor : R.color.dark_menu_listview_textcolor));
             textView.setText(item.getName());
             return convertView;
         }
+    }
+    public void updateTheme(){
+           isLight = ((MainActivity)mActivity).isLight();
+            li_menu.setBackgroundColor(getResources().getColor(isLight ? R.color.light_menu_header : R.color.dark_menu_header));
+            tv_backup.setTextColor(getResources().getColor(isLight ? R.color.light_menu_header_tv:R.color.dark_menu_header_tv));
+            tv_login.setTextColor(getResources().getColor(isLight ? R.color.light_menu_header_tv:R.color.dark_menu_header_tv));
+            tv_download.setTextColor(getResources().getColor(isLight ? R.color.light_menu_header_tv:R.color.dark_menu_header_tv));
+            tv_main.setBackgroundColor(getResources().getColor(isLight ? R.color.light_menu_index_background:R.color.dark_menu_index_background));
+            mListView.setBackgroundColor(getResources().getColor(isLight?R.color.light_menu_listview_background:R.color.dark_menu_listview_background));
     }
 }

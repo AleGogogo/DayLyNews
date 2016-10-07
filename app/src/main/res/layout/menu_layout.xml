@@ -5,6 +5,7 @@
               android:orientation="vertical">
     <!--这个高度怎么设置-->
     <LinearLayout
+        android:id="@+id/id_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorToolBarBackground"
@@ -67,28 +68,30 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/id_menu_main_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/colorMenuBackGround"
-            android:gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="首页"
-            android:textColor="@color/colorToolBarBackground"
-            android:textSize="18dp"
-            />
 
-        <ListView
-            android:id="@+id/id_menu_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorAccount_white"
-            android:scrollbars="none"
-            android:divider="@color/transparent">
 
-        </ListView>
+
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/id_menu_main_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorMenuBackGround"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="首页"
+        android:textColor="@color/colorToolBarBackground"
+        android:textSize="18dp"
+        />
+    <ListView
+        android:id="@+id/id_menu_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccount_white"
+        android:scrollbars="none"
+        android:divider="@color/transparent">
+
+    </ListView>
 </LinearLayout>

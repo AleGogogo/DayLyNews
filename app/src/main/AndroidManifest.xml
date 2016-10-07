@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.activity.MainActivity"/>
+        <activity android:name=".activity.activity.LatestContentActivity"/>
+        <activity android:name=".activity.activity.NewsContentActivity"/>
     </application>
 
 </manifest>
