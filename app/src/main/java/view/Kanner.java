@@ -109,7 +109,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
             iv_dots.add(imageView);
         }
 
-        for (int i = 0; i <= len + 1; i++) {
+        for (int i = 0; i <len + 1; i++) {
             View fm= LayoutInflater.from(mContext).inflate(R.layout
                     .kanner_content_layout
                     , null);
@@ -123,12 +123,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
                 title.setText(top_storiesEntities.get(len-1).getTitle());
             }
             //在本来的最后一张图片后面，再添加一张和第一张一样的图片来充当一个缓冲
-            else if (i == len+1){
-                mImageLoader.displayImage(top_storiesEntities.get(0).getImage(),
-                        imageView,options
-                );
-                title.setText(top_storiesEntities.get(0).getTitle());
-            }else {
+            else {
                 mImageLoader.displayImage(top_storiesEntities.get(i-1).getImage(),
                         imageView,options);
                 title.setText(top_storiesEntities.get(i-1).getTitle());
@@ -214,6 +209,7 @@ public class Kanner extends FrameLayout implements View.OnClickListener{
 
         @Override
         public void onPageSelected(int position) {
+            Log.d(TAG, "onPageSelected: position["+position+"]");
            for (int i =0;i<iv_dots.size();i++){
                if (i == position-1){
                    iv_dots.get(position).setImageResource(R.drawable.dot_focus);

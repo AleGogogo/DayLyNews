@@ -17,7 +17,7 @@ import android.view.animation.Interpolator;
 /**
  * Created by LYW on 2016/9/23.
  */
-public class RevealBackgroundView extends View {
+public class RevealBackGroundView extends View {
     //我们想要掌控动画的状态（未开始，开始了，结束）
     //Reveal效果必须是圆形的
     //Reveal动画必须从点击的那个点开始
@@ -38,7 +38,7 @@ public class RevealBackgroundView extends View {
     private int state = STATE_NOT_STARTED;
 
 
-    public RevealBackgroundView(Context context) {
+    public RevealBackGroundView(Context context) {
         super(context);
         iniUI();
     }
@@ -49,18 +49,18 @@ public class RevealBackgroundView extends View {
         fillPaint.setColor(Color.WHITE);
     }
 
-    public RevealBackgroundView(Context context, AttributeSet attrs) {
+    public RevealBackGroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RevealBackgroundView(Context context, AttributeSet attrs, int
+    public RevealBackGroundView(Context context, AttributeSet attrs, int
             defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public RevealBackgroundView(Context context, AttributeSet attrs, int
+    public RevealBackGroundView(Context context, AttributeSet attrs, int
             defStyleAttr, int defStyleRes, Paint fillPaint) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.fillPaint = fillPaint;

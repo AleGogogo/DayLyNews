@@ -25,16 +25,16 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import util.Constant;
 import util.HttpUtils;
-import view.RevealBackgroundView;
+import view.RevealBackGroundView;
 import xiaomeng.bupt.com.daylynews.R;
 
 /**
  * Created by LYW on 2016/9/23.
  */
-public class NewsContentActivity extends AppCompatActivity implements RevealBackgroundView.OnStateChangeListener{
+public class NewsContentActivity extends AppCompatActivity implements RevealBackGroundView.OnStateChangeListener{
     private WebView mWebView;
     private CoordinatorLayout coordinatorLayout;
-    private RevealBackgroundView revealBackgroundView;
+    private RevealBackGroundView revealBackgroundView;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolBar;
     private StoriesEntity entity;
@@ -76,7 +76,7 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
     }
 
     private void initReavalBackgroundView() {
-        revealBackgroundView = (RevealBackgroundView) findViewById(R.id.id_news_content_revealbackGroundView);
+        revealBackgroundView = (RevealBackGroundView) findViewById(R.id.id_news_content_revealbackGroundView);
         initCoordinatorLayout();
     }
 
@@ -145,7 +145,7 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
 
     @Override
     public void onStateChange(int state) {
-        if (RevealBackgroundView.STATE_FINISHED == state){
+        if (RevealBackGroundView.STATE_FINISHED == state){
 
             coordinatorLayout.setVisibility(View.VISIBLE);
 

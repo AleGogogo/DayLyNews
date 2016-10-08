@@ -2,8 +2,10 @@ package xiaomeng.bupt.com.daylynews.activity.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -43,16 +45,19 @@ public class SplashActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.start_layout);
         mStartImage = (ImageView) findViewById(R.id.id_start_image);
-        initIamge();
+        initImage();
 
     }
 
-    private void initIamge() {
+    private void initImage() {
         //这个具体目录是哪里？
         //res//mimap-xh？
         File dir = getFilesDir();
 
-        final File imgFile = new File(dir, "start.jpg");
+        String imgPath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + "/daily/start.jpg";
+        final File imgFile = new File(imgPath);
+        if (!imgFile.getParentFile().exists()) imgFile.getParentFile().mkdir();
         if (imgFile.exists()) {
             mStartImage.setImageBitmap(BitmapFactory.decodeFile(imgFile
                     .getAbsolutePath()));
@@ -88,37 +93,59 @@ public class SplashActivity extends Activity {
                                 }
 
                                 @Override
-                                public void onResponse(Call call, Response response) throws IOException {
+                                public void onResponse(Call call, Response
+                                        response) throws IOException {
                                     try {
-                                        String result = response.body().string();
-                                        Log.d(TAG, "the result is " +result);
+                                        String result = response.body()
+                                                .string();
+                                        Log.d(TAG, "the result is " + result);
                                         JSONObject jsonObject = new JSONObject
                                                 (result);
                                         String url = jsonObject.getString
                                                 ("img");
-                                        Log.d(TAG, "获取的Url 为："+url);
-                                        HttpUtils.get(url, new Callback() {
+                                        Log.d(TAG, "获取的Url 为：" + url);
+                                        HttpUtils.getImage(url, new Callback() {
                                             @Override
                                             public void onFailure(Call call,
                                                                   IOException
                                                                           e) {
-                                                    startActivity();
+                                                startActivity();
                                             }
 
                                             @Override
-                                            public void onResponse(Call call, Response response) throws IOException {
-                                                byte[] binaryData = response.body().bytes();
-                                                saveIamge(imgFile,binaryData);
-                                                Log.d(TAG, "onSuccess: 成功获取启动图片！");
+                                            public void onResponse(Call call,
+                                                                   Response
+                                                                           response) throws IOException {
+                                                byte[] binaryData = response
+                                                        .body().bytes();
+                                                final Bitmap bitmap = BitmapFactory
+                                                        .decodeByteArray
+                                                                (binaryData,
+                                                                        0,
+                                                                        binaryData.length);
+                                                saveIamge(imgFile, binaryData);
+                                                mStartImage.post(new Runnable() {
+
+
+                                                    @Override
+                                                    public void run() {
+                                                        mStartImage.setImageBitmap(bitmap);
+                                                    }
+                                                });
+
+                                                Log.d(TAG, "onSuccess: " +
+                                                        "成功获取启动图片！");
                                                 startActivity();
                                             }
                                         });
-                                } catch (JSONException e) {
+                                    } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                }});
-                }else {
-                    Toast.makeText(SplashActivity.this,"网络链接失败",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(SplashActivity.this, "网络链接失败", Toast
+                            .LENGTH_SHORT).show();
                     startActivity();
                 }
             }
@@ -128,11 +155,11 @@ public class SplashActivity extends Activity {
 
             }
         });
-         mStartImage.startAnimation(scaleAnimation);
+        mStartImage.startAnimation(scaleAnimation);
     }
 
     private void startActivity() {
-        Intent intent = new Intent(SplashActivity.this,MainActivity.class);
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         Log.d(TAG, "startActivity: 进入MainActivity");
     }

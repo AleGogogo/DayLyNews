@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSrfLayout;
     private Toolbar mToolbar;
     private MenuFragment menuFragment;
-    private boolean isLight;
+    private boolean isLight = false;
     //menuFragment 主题新闻里表的id
     private String curId;
 
