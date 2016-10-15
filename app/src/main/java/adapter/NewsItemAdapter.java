@@ -16,8 +16,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 import model.StoriesEntity;
-
 import xiaomeng.bupt.com.daylynews.R;
+import xiaomeng.bupt.com.daylynews.activity.activity.MainActivity;
 
 /**
  * Created by LYW on 2016/9/21.
@@ -27,7 +27,7 @@ public class NewsItemAdapter extends BaseAdapter{
     private List<StoriesEntity> entities;
     private ImageLoader mImageLoader;
     private DisplayImageOptions options;
-    private boolean isLight;
+    private boolean isLight ;
 
     public NewsItemAdapter(Context context, List<StoriesEntity> entities){
         mContext = context;
@@ -37,6 +37,8 @@ public class NewsItemAdapter extends BaseAdapter{
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
+        isLight =((MainActivity)mContext).isLight();
+
     }
 
 
@@ -82,13 +84,16 @@ public class NewsItemAdapter extends BaseAdapter{
                  );
 
           StoriesEntity stroiesEntity = entities.get(position);
+        viewHolder.tv_title.setText(entities.get(position).getTitle());
           if (stroiesEntity.getImages()!=null){
               viewHolder.iv_image.setVisibility(View.VISIBLE);
               mImageLoader.displayImage(stroiesEntity.getImages().get(0),
                       viewHolder.iv_image,options);
           }else {
               viewHolder.iv_image.setVisibility(View.GONE);
+
           }
+
         return convertView;
     }
 

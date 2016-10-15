@@ -158,4 +158,10 @@ public class News {
             this.name = name;
         }
     }
+
+    @Override
+    public String toString() {
+        return super.toString()+" background is["+ getBackground()+"]," +
+                "images is ["+getImage()+"], stories is ["+getStories()+"]";
+    }
 }

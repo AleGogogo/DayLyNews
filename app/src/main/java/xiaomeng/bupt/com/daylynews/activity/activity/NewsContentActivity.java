@@ -1,8 +1,8 @@
 package xiaomeng.bupt.com.daylynews.activity.activity;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import db.WebcheDBHelper;
 import model.Content;
 import model.StoriesEntity;
 import okhttp3.Call;
@@ -39,7 +40,7 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
     private Toolbar mToolBar;
     private StoriesEntity entity;
     private Content mContent;
-    private MyHandler myHandler = new MyHandler();
+    private WebcheDBHelper dbHelper;
     private static final String TAG = "NewsContentActivity";
 
     @Override
@@ -47,6 +48,7 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_content_layout);
         entity = (StoriesEntity) getIntent().getSerializableExtra("entity");
+        dbHelper = new WebcheDBHelper(this,1);
         initView();
         initDate();
         setUpReavalBackgroundView(savedInstanceState);
@@ -65,7 +67,8 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
                     return true;
                 }
             });
-
+        }else {
+            revealBackgroundView.setFinishedFrame();
         }
     }
 
@@ -81,7 +84,7 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
     }
 
     private void initCoordinatorLayout() {
-        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.id_coordinatorLayout);
+        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.id_news_content_coordinatorlayout);
         //why?
         coordinatorLayout.setVisibility(View.INVISIBLE);
         initAppBarLayout();
@@ -125,22 +128,41 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.execSQL("replace into Cache(newsId,json) values(" + entity.getId() + ",'" + result + "')");
+                    db.close();
                     result = result.replaceAll("'","''");
-                    paraseJson(result);
+                    parseJson(result);
                 }
             });
+        }else {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select * from Cache where newsId = " + entity.getId(), null);
+            if (cursor.moveToFirst()) {
+                String json = cursor.getString(cursor.getColumnIndex("json"));
+                 parseJson(json);
+            }
+            cursor.close();
+            db.close();
         }
 
     }
 
-    private void paraseJson(String result) {
+    private void parseJson(String result) {
         Gson gson = new Gson();
         mContent = gson.fromJson(result,Content.class);
         //file的绝对路径对么？
         String css = "<link rel=\"stylesheet\" href=\"file:///android_asset/css/news.css\" type=\"text/css\">";
         String html = "<html><head>" + css + "</head><body>" + mContent.getBody() + "</body></html>";
         html = html.replace("<div class=\"img-place-holder\">", "");
-        mWebView.loadDataWithBaseURL("x-data://base", html, "text/html", "UTF-8", null);
+        final  String finalHtml = html;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mWebView.loadDataWithBaseURL("x-data://base", finalHtml, "text/html", "UTF-8", null);
+            }
+        });
+
     }
 
     @Override
@@ -153,12 +175,6 @@ public class NewsContentActivity extends AppCompatActivity implements RevealBack
     }
 
 
-    private class MyHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-    }
 
     @Override
     public void onBackPressed() {

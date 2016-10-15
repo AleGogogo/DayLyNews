@@ -207,5 +207,9 @@ public class Content {
      ]
      }
      */
-
+    @Override
+    public String toString() {
+        return super.toString()+"title is [ "+getTitle()+"],"
+                +"body is ["+getBody() + "],";
+    }
 }

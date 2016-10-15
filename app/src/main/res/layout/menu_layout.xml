@@ -39,7 +39,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="25dp"
             android:orientation="horizontal">
 
             <TextView
@@ -64,26 +64,21 @@
                 android:gravity="center"
                 android:text="@string/menu_offonlinedownload"
                 android:textColor="@color/colorAccount_white"
-                android:textSize="15dp"/>
+                android:textSize="15sp"/>
 
         </LinearLayout>
-
-
-
-
 
     </LinearLayout>
     <TextView
         android:id="@+id/id_menu_main_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="@color/colorMenuBackGround"
-        android:gravity="center_horizontal"
         android:padding="10dp"
+        android:paddingLeft="80dp"
         android:text="首页"
         android:textColor="@color/colorToolBarBackground"
-        android:textSize="18dp"
+        android:textSize="18sp"
         />
     <ListView
         android:id="@+id/id_menu_listview"

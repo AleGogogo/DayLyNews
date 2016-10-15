@@ -17,4 +17,7 @@ public class Constant {
     public static final String CONTENT = "news/";
     public static final String START_LOCATION = "start_location";
 
+    public static final int LATEST_COLUMN = Integer.MAX_VALUE;
+    public static final int BASE_COLUMN = 100000000;
+
 }

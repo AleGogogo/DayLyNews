@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import db.CacheDBHelper;
 import fragment.MainFragment;
 import fragment.MenuFragment;
 import fragment.NewsFragment;
@@ -23,8 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private SwipeRefreshLayout mSrfLayout;
     private Toolbar mToolbar;
-    private MenuFragment menuFragment;
-    private boolean isLight;
+    private MenuFragment menuFragment ;
+    private boolean isLight = true ;
+    private CacheDBHelper dbHelper;
     //menuFragment 主题新闻里表的id
     private String curId;
 
@@ -33,10 +35,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbHelper = new CacheDBHelper(this,1);
         initView();
         LoadLatest();
     }
 
+    public CacheDBHelper getDBHelper(){
+        return dbHelper;
+    }
     private void LoadLatest() {
         replace();
         curId = "latest";
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 mSrfLayout.setRefreshing(false);
             }
         });
+        //这个看不出来有什么区别啊
 //        mSrfLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
 //                android.R.color.holo_green_light,
 //                android.R.color.holo_orange_light,

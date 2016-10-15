@@ -2,9 +2,12 @@ package fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 import adapter.MainNewsItemAdapter;
+import db.CacheDBHelper;
 import model.Before;
 import model.Latest;
 import model.StoriesEntity;
@@ -118,6 +122,7 @@ public class MainFragment extends BaseFragment {
                     int[] startingLocation = new int[2];
                 //什么意思？
                      startingLocation[0] += view.getWidth()/2;
+                Log.d(TAG, "onItemClick: mListView 点击成功！");
                 Intent intent = new Intent(mActivity, LatestContentActivity.class);
                 StoriesEntity entity = (StoriesEntity) parent.getAdapter().getItem(position)    ;
                 intent.putExtra(Constant.START_LOCATION,startingLocation);
@@ -141,11 +146,30 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
+                    SQLiteDatabase db = ((MainActivity) mActivity).getDBHelper().getWritableDatabase();
+                    db.execSQL("replace into CacheList(date,json) values(" + date + ",' " + result + "')");
+                    db.close();
                     parseBeforeJson(result);
                 }
             });
+        }else {
+            SQLiteDatabase db = ((MainActivity) mActivity).getDBHelper().getReadableDatabase();
+            Cursor cursor = db.rawQuery("select * from CacheList where date = " + date, null);
+            if (cursor.moveToFirst()) {
+                String json = cursor.getString(cursor.getColumnIndex("json"));
+                parseBeforeJson(json);
+            } else {
+                db.delete("CacheList", "date < " + date, null);
+                isLoading = false;
+                Snackbar sb = Snackbar.make(mListView, "没有更多的离线内容了~", Snackbar.LENGTH_SHORT);
+                sb.getView().setBackgroundColor(getResources().getColor(((MainActivity) mActivity).isLight() ? android.R.color.holo_blue_dark : android.R.color.black));
+                sb.show();
+            }
+            cursor.close();
+            db.close();
         }
-    }
+        }
+
 
     @Override
     protected void initData() {
@@ -180,9 +204,24 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                         String json = response.body().string();
-                        parseLatesJson(json);
+                    CacheDBHelper dbHelper = ((MainActivity) mActivity).getDBHelper();
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.execSQL("replace into CacheList(date,json) values("+Constant.LATEST_COLUMN+",' " + json+ "')");
+                    db.close();
+                    parseLatesJson(json);
                 }
             });
+        }else {
+            CacheDBHelper dbHelper = ((MainActivity) mActivity).getDBHelper();
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select * from CacheList where date = " + Constant.LATEST_COLUMN, null);
+            if (cursor.moveToNext()){
+                String json = cursor.getString(cursor.getColumnIndex("json"));
+                parseLatesJson(json);
+            }else {
+                isLoading = false;
+            }
+
         }
     }
 

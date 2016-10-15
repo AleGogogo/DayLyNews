@@ -23,7 +23,7 @@ public class RevealBackgroundView extends View {
     //Reveal动画必须从点击的那个点开始
     //我们还要能主动结束动画
     public static final int STATE_NOT_STARTED = 0;
-    public  static final int STATE_FILE_STARTED = 1;
+    public  static final int STATE_FILL_STARTED = 1;
     public  static final int STATE_FINISHED = 2;
     private static final int FILL_TIME = 600;
     private int startLocationX ;
@@ -51,11 +51,13 @@ public class RevealBackgroundView extends View {
 
     public RevealBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        iniUI();
     }
 
     public RevealBackgroundView(Context context, AttributeSet attrs, int
             defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        iniUI();
     }
 
 
@@ -72,7 +74,7 @@ public class RevealBackgroundView extends View {
      * @param tapLocationOnScreen 点击的坐标
      */
     public void startFromLocation(int[] tapLocationOnScreen){
-        chageState(STATE_FILE_STARTED);
+        changeState(STATE_FILL_STARTED);
         startLocationX = tapLocationOnScreen[0];
         startLocationY = tapLocationOnScreen[1];
         //translate 应该是一个渐变的效果
@@ -82,7 +84,7 @@ public class RevealBackgroundView extends View {
         revealAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                chageState(STATE_FINISHED);
+                changeState(STATE_FINISHED);
             }
         });
         revealAnimator.start();
@@ -90,7 +92,7 @@ public class RevealBackgroundView extends View {
     }
 
     public void setFinishedFrame(){
-        chageState(STATE_FINISHED);
+        changeState(STATE_FINISHED);
         invalidate();
     }
     /**
@@ -106,7 +108,7 @@ public class RevealBackgroundView extends View {
         }
     }
 
-    private void chageState(int state) {
+    private void changeState(int state) {
         //判断此刻状态和传入的状态一样？
         if (this.state == state){
             return;
@@ -120,11 +122,11 @@ public class RevealBackgroundView extends View {
         this.onStateChangeListener = onStateChangeListener;
     }
 
-    private void setFilPaintColor(int color){
+    public void setFilPaintColor(int color){
             fillPaint.setColor(color);
     }
 
-    private void setCurrentRedius(int redius){
+    public void setCurrentRedius(int redius){
         this.currentRedius = redius;
         invalidate();
     }

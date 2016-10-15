@@ -3,7 +3,7 @@
     package="xiaomeng.bupt.com.daylynews">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.write_external_storage"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
@@ -23,6 +23,7 @@
         <activity android:name=".activity.activity.MainActivity"/>
         <activity android:name=".activity.activity.LatestContentActivity"/>
         <activity android:name=".activity.activity.NewsContentActivity"/>
+
     </application>
 
 </manifest>

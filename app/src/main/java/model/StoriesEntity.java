@@ -70,6 +70,9 @@ public class StoriesEntity implements Serializable{
      * id : 3930445
      */
 
-
-
+    @Override
+    public String toString() {
+        return super.toString()+"title is ["+ getTitle()+"], " +
+                "images is ["+getImages()+"]";
+    }
 }

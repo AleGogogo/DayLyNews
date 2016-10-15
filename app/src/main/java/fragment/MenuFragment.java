@@ -28,6 +28,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import util.Constant;
 import util.HttpUtils;
+import util.PreUtil;
 import xiaomeng.bupt.com.daylynews.R;
 import xiaomeng.bupt.com.daylynews.activity.activity.MainActivity;
 
@@ -111,6 +112,7 @@ public class MenuFragment extends BaseFragment {
                  @Override
                  public void onResponse(Call call, Response response) throws IOException {
                      String json = response.body().string();
+                     PreUtil.putStringtoDefault(mActivity,Constant.THEME_NEWSiTEMS,json);
                      Log.d(TAG, "onResponse: json is "+json);
                      try {
                          JSONObject jsonObject = new JSONObject(json);
@@ -123,6 +125,13 @@ public class MenuFragment extends BaseFragment {
                  }
              });
          }else {
+             String json = PreUtil.getStringFromDefault(mActivity,Constant.THEME_NEWSiTEMS,"");
+             try {
+                 JSONObject jsonObject = new JSONObject(json);
+                 parseJson(jsonObject);
+             } catch (JSONException e) {
+                 e.printStackTrace();
+             }
              Toast.makeText(getActivity(),"网络链接错误",Toast.LENGTH_SHORT).show();
          }
 
@@ -195,7 +204,7 @@ public class MenuFragment extends BaseFragment {
                 convertView =LayoutInflater.from(getActivity()).inflate(R.layout.menu_item_layout,
                         parent,false);
             }
-            TextView textView = (TextView) convertView.findViewById(R.id.id_menu_newsitem);
+            TextView textView = (TextView) convertView.findViewById(R.id.id_menu_news_item);
             textView.setTextColor(getResources().getColor(isLight ? R.color.light_menu_listview_textcolor : R.color.dark_menu_listview_textcolor));
             textView.setText(item.getName());
             return convertView;

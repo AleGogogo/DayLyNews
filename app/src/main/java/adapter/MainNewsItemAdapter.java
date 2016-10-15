@@ -21,6 +21,7 @@ import java.util.List;
 import model.StoriesEntity;
 import util.Constant;
 import xiaomeng.bupt.com.daylynews.R;
+import xiaomeng.bupt.com.daylynews.activity.activity.MainActivity;
 
 /**
  * Created by LYW on 2016/9/20.
@@ -42,6 +43,7 @@ public class MainNewsItemAdapter extends BaseAdapter {
                 .cacheOnDisk(true)
                 .cacheInMemory(true)
                 .build();
+        isLight = ((MainActivity) mContext ).isLight();
     }
 
     public void addList(List<StoriesEntity> items) {

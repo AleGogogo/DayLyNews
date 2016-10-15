@@ -2,8 +2,10 @@ package xiaomeng.bupt.com.daylynews.activity.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -11,10 +13,6 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.BinaryHttpResponseHandler;
-
-import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,9 +48,13 @@ public class SplashActivity extends Activity {
     private void initIamge() {
         //这个具体目录是哪里？
         //res//mimap-xh？
-        File dir = getFilesDir();
+        String imagPath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath()+"/daily/start.jpg";
 
-        final File imgFile = new File(dir, "start.jpg");
+        final File imgFile = new File(imagPath);
+        if (!imgFile.getParentFile().exists()){
+            imgFile.getParentFile().mkdir();
+        }
         if (imgFile.exists()) {
             mStartImage.setImageBitmap(BitmapFactory.decodeFile(imgFile
                     .getAbsolutePath()));
@@ -97,7 +99,7 @@ public class SplashActivity extends Activity {
                                         String url = jsonObject.getString
                                                 ("img");
                                         Log.d(TAG, "获取的Url 为："+url);
-                                        HttpUtils.get(url, new Callback() {
+                                        HttpUtils.getImage(url, new Callback() {
                                             @Override
                                             public void onFailure(Call call,
                                                                   IOException
@@ -107,9 +109,18 @@ public class SplashActivity extends Activity {
 
                                             @Override
                                             public void onResponse(Call call, Response response) throws IOException {
-                                                byte[] binaryData = response.body().bytes();
+                                                final byte[] binaryData = response.body().bytes();
                                                 saveIamge(imgFile,binaryData);
                                                 Log.d(TAG, "onSuccess: 成功获取启动图片！");
+                                                mStartImage.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Bitmap bitmap = BitmapFactory.
+                                                                decodeByteArray(binaryData,0,binaryData.length);
+                                                        mStartImage.setImageBitmap(bitmap);
+
+                                                    }
+                                                });
                                                 startActivity();
                                             }
                                         });
