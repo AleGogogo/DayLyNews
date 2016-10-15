@@ -24,9 +24,14 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private SwipeRefreshLayout mSrfLayout;
     private Toolbar mToolbar;
+<<<<<<< HEAD
     private MenuFragment menuFragment ;
     private boolean isLight = true ;
     private CacheDBHelper dbHelper;
+=======
+    private MenuFragment menuFragment;
+    private boolean isLight = false;
+>>>>>>> 537903c1e5057958806399c601d3e877e0d939ab
     //menuFragment 主题新闻里表的id
     private String curId;
 

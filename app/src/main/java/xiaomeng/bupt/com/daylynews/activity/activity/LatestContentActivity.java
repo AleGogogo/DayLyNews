@@ -42,16 +42,16 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import util.Constant;
 import util.HttpUtils;
-import view.RevealBackgroundView;
+import view.RevealBackGroundView;
 import xiaomeng.bupt.com.daylynews.R;
 
 /**
  * Created by LYW on 2016/9/23.
  */
-public class LatestContentActivity extends AppCompatActivity implements RevealBackgroundView.OnStateChangeListener {
+public class LatestContentActivity extends AppCompatActivity implements RevealBackGroundView.OnStateChangeListener {
     private StoriesEntity entity;
     private Content mContent;
-    private RevealBackgroundView revealBackgroundView;
+    private RevealBackGroundView revealBackgroundView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private AppBarLayout mAppBarLayout;
     private ImageLoader imageLoader;
@@ -170,6 +170,10 @@ public class LatestContentActivity extends AppCompatActivity implements RevealBa
     }
 
     private void initAppBarLayout() {
+<<<<<<< HEAD
+=======
+        revealBackgroundView = (RevealBackGroundView) findViewById(R.id.id_revealbackgroundview);
+>>>>>>> 537903c1e5057958806399c601d3e877e0d939ab
         mAppBarLayout = (AppBarLayout) findViewById(R.id.id_appbarlayout);
         mAppBarLayout.setVisibility(View.INVISIBLE);
         revealBackgroundView = (RevealBackgroundView) findViewById(R.id.id_revealbackgroundview);

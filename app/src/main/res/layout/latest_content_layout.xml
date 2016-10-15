@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
     <!--这个是实现页面扩散效果的-->
-    <view.RevealBackgroundView
+    <view.RevealBackGroundView
         android:id="@+id/id_revealbackgroundview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
